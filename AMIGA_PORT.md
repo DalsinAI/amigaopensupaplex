@@ -10,7 +10,7 @@
 
 ## Target contract
 
-Primary target: AmigaOS 3.x / AmigaChrome AC090 / Motorola 68040 + FPU.
+Primary target: AmigaOS 3.x / AmiCradle AC090 / Motorola 68040 + FPU.
 
 Use the OPEN platform libraries where applicable: OpenGPU, OpenAudio/OpenAHI, OpenInput, OpenSocket and measured OpenMulticore work. Preserve a correct 68040 fallback and do not assume Roadshow.
 

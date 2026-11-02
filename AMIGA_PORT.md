@@ -1,6 +1,6 @@
 # Amiga port intake: OpenSupaplex
 
-- Port Atlas: [g-opensupaplex](https://www.amigachrome.com/ports/#g-opensupaplex)
+- Port Atlas: [g-opensupaplex](https://www.amicradle.com/ports/#g-opensupaplex)
 - Priority: `P2`
 - Atlas decision: `port`
 - Upstream source: `https://github.com/sergiou87/open-supaplex`

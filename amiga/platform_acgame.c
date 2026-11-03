@@ -162,7 +162,7 @@ static uint8_t kScreenPixels[kScreenWidth * kScreenHeight];
 uint8_t *gScreenPixels = kScreenPixels;
 static ScalingMode gScalingMode = ScalingModeAspectFit;
 static acgame_rgb8 gPalette[256];
-static int gMouseX = kScreenWidth / 2, gMouseY = kScreenHeight / 2;
+static int gPointerX = kScreenWidth / 2, gPointerY = kScreenHeight / 2;
 static uint32_t gLastPresent;
 static int gPresentPending;
 
@@ -249,8 +249,8 @@ void centerMouse(void)
 
 void moveMouse(int x, int y)
 {
-    gMouseX = x;
-    gMouseY = y;
+    gPointerX = x;
+    gPointerY = y;
 }
 
 void hideMouse(void)
@@ -259,16 +259,16 @@ void hideMouse(void)
 
 void getMouseState(int *x, int *y, uint8_t *leftButton, uint8_t *rightButton)
 {
-    gMouseX += gInput.mouse_dx;
-    gMouseY += gInput.mouse_dy;
+    gPointerX += gInput.mouse_dx;
+    gPointerY += gInput.mouse_dy;
     gInput.mouse_dx = 0;
     gInput.mouse_dy = 0;
-    if (gMouseX < 0) gMouseX = 0;
-    if (gMouseX > kScreenWidth) gMouseX = kScreenWidth;
-    if (gMouseY < 0) gMouseY = 0;
-    if (gMouseY > kScreenHeight) gMouseY = kScreenHeight;
-    *x = gMouseX;
-    *y = gMouseY;
+    if (gPointerX < 0) gPointerX = 0;
+    if (gPointerX > kScreenWidth) gPointerX = kScreenWidth;
+    if (gPointerY < 0) gPointerY = 0;
+    if (gPointerY > kScreenHeight) gPointerY = kScreenHeight;
+    *x = gPointerX;
+    *y = gPointerY;
     *leftButton = (gInput.mouse_buttons & 1) != 0;
     *rightButton = (gInput.mouse_buttons & 2) != 0;
 }

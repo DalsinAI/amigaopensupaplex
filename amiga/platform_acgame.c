@@ -41,6 +41,7 @@
 
 static const char version[] __attribute__((used)) =
     "$VER: OpenSupaplex 7.1 (03.11.2026) AmiCradle";
+unsigned long __stack = 65536;
 
 /* ------------------------------------------------------------- system */
 

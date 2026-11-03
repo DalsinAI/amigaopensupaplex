@@ -23,6 +23,10 @@
 #include <SDL.h>
 #elif HAVE_SDL
 #include <SDL/SDL.h>
+#elif defined(__amigaos__)
+// Big-endian, no SDL
+#define SDL_Swap16(x) ((uint16_t)(((uint16_t)(x) << 8) | ((uint16_t)(x) >> 8)))
+#define SDL_SwapLE16(x) SDL_Swap16(x)
 #endif
 
 const char b64chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

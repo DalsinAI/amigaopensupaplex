@@ -19,3 +19,11 @@ No build, runtime, playability or release claim is made by this source-intake co
 ## Rights and data boundary
 
 review; Confirm source/data licences before release.
+
+## Build and controls
+
+    make -f amiga/Makefile.amigaos STOVE=... NDK=... ACGAME=...
+
+The platform layer is `amiga/platform_acgame.c`: 320x200 in 16 colours through ACGame (AGA or RTG), keyboard through ACGame's raw keys (amicradle-guest #564), mouse, pads, and sound effects through ahi.device (16-bit mono, 22 kHz). The game runs at its original 70 frames a second; the display shows at most one frame per vertical blank. Music (the XM modules) is not played yet. Two upstream files carry small Amiga changes: `src/utils.c` (byte swaps without SDL) and `src/graphics.c` (deadline frame pacing).
+
+Keys are the original game's: arrows or keypad move, Space with a direction eats or pushes without moving, Esc quits a level, F-keys and the mouse work the menus. Help stands in for F12, the keypad brackets for Num Lock and Scroll Lock.

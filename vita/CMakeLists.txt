@@ -142,9 +142,8 @@ vita_create_vpk(${PROJECT_NAME}.vpk ${VITA_TITLEID} ${PROJECT_NAME}.self
   FILE ../resources/audio/infotron-blaster.wav audio/infotron-blaster.wav
   FILE ../resources/audio/infotron-roland.wav audio/infotron-roland.wav
   FILE ../resources/audio/infotron-sample.wav audio/infotron-sample.wav
-  FILE ../resources/audio/music-beep.xm audio/music-beep.xm
-  FILE ../resources/audio/music-adlib.xm audio/music-adlib.xm
-  FILE ../resources/audio/music-roland.xm audio/music-roland.xm
+  FILE ../resources/audio/music-adlib.mod audio/music-adlib.mod
+  FILE ../resources/audio/music-roland.mod audio/music-roland.mod
   FILE ../resources/audio/push-adlib.wav audio/push-adlib.wav
   FILE ../resources/audio/push-beep.wav audio/push-beep.wav
   FILE ../resources/audio/push-blaster.wav audio/push-blaster.wav

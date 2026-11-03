@@ -11,3 +11,5 @@ To make them again, take the XMs from upstream at bad56a4 and run:
 
     python3 amiga/music/xm2mod.py music-adlib.xm resources/audio/music-adlib.mod
     python3 amiga/music/xm2mod.py music-roland.xm resources/audio/music-roland.mod
+
+The other platforms in this tree load the same MODs: SDL_mixer's music path now opens `music-%s.mod` (beep falls back to AdLib), the Vita package lists the MODs, and the Nintendo DS build, where maxmod turns `resources/audio` into a soundbank, plays the AdLib tune for beep.

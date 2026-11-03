@@ -26,7 +26,7 @@ GAME    = $(notdir $(basename $(wildcard src/*.c)))
 ACG     = c2p_ref ham8 platform_aros_aga
 
 OBJS    = $(GAME:%=$(BUILD)/%.o) $(BUILD)/ini.o $(BUILD)/virtualKeyboard.o \
-          $(BUILD)/platform_acgame.o $(ACG:%=$(BUILD)/acgame_%.o)
+          $(BUILD)/platform_acgame.o $(BUILD)/modplay.o $(ACG:%=$(BUILD)/acgame_%.o)
 
 all: $(OUT)/OpenSupaplex
 
@@ -43,8 +43,11 @@ $(BUILD)/ini.o: src/lib/ini/ini.c | $(BUILD)
 $(BUILD)/virtualKeyboard.o: src/null/virtualKeyboard.c | $(BUILD)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(BUILD)/platform_acgame.o: amiga/platform_acgame.c src/*.h | $(BUILD)
+$(BUILD)/platform_acgame.o: amiga/platform_acgame.c amiga/modplay.h src/*.h | $(BUILD)
 	$(CC) $(CFLAGS) -Wextra -Wno-unused-parameter -c -o $@ $<
+
+$(BUILD)/modplay.o: amiga/modplay.c amiga/modplay.h | $(BUILD)
+	$(CC) $(CFLAGS) -Wextra -c -o $@ $<
 
 $(BUILD)/acgame_%.o: $(ACGAME)/src/%.c | $(BUILD)
 	$(CC) $(ACFLAGS) -c -o $@ $<

@@ -5,7 +5,8 @@
  * The game draws 320x200 in 16 colours at 70 frames a second, as on VGA.
  * The display shows at most one frame per vertical blank; frames in
  * between are drawn but not shown, so the game keeps its speed on a 50 Hz
- * screen. Music (XM modules) is not played yet.
+ * screen. The music is played from ProTracker MODs made from the original
+ * XM tunes (see amiga/music/README.md).
  *
  * The AmiCradle Team. GPL 3, like OpenSupaplex.
  */
@@ -36,6 +37,7 @@
 #include "../src/system.h"
 #include "../src/touchscreen.h"
 #include "../src/video.h"
+#include "modplay.h"
 
 static const char version[] __attribute__((used)) =
     "$VER: OpenSupaplex 7.1 (03.11.2026) AmiCradle";
@@ -536,7 +538,8 @@ static Sample gSamples[SoundEffectCount];
 static const Sample *volatile gVoice;
 static volatile uint32_t gVoicePos;
 static volatile uint8_t gEffectsVolume = kMaxVolume;
-static uint8_t gMusicVolume = kMaxVolume;
+static volatile uint8_t gMusicVolume = kMaxVolume;
+static uint8_t gMusicPlaying;
 
 static struct SignalSemaphore gAudioLock;
 static struct Process *gMixer;
@@ -560,6 +563,7 @@ static void mix(int16_t *out, unsigned len)
         }
         out[i] = s;
     }
+    modMix(out, len, gMusicVolume);
     ReleaseSemaphore(&gAudioLock);
 }
 
@@ -763,6 +767,7 @@ void destroyAudio(void)
     Wait(SIGBREAKF_CTRL_F);
     gMixer = NULL;
     freeSamples();
+    modFree();
 }
 
 void setSoundType(SoundType musicType, SoundType effectsType)
@@ -776,6 +781,22 @@ void setSoundType(SoundType musicType, SoundType effectsType)
     if (!gMixer)
         return;
     freeSamples();
+
+    /* The PC speaker tune has no MOD (its range is too wide for one), so
+     * the internal sound types play the AdLib tune. */
+    ObtainSemaphore(&gAudioLock);
+    if (musicType == SoundTypeNone ||
+        modLoad(musicType == SoundTypeRoland ? "audio/music-roland.mod"
+                                             : "audio/music-adlib.mod", kAudioRate) != 0)
+        modFree();
+    else
+    {
+        modStart();
+        if (!gMusicPlaying)
+            modStop();
+    }
+    ReleaseSemaphore(&gAudioLock);
+
     switch (effectsType)
     {
         case SoundTypeRoland: suffix = "roland"; break;
@@ -793,16 +814,29 @@ void setSoundType(SoundType musicType, SoundType effectsType)
 }
 
 uint8_t getMusicVolume(void) { return gMusicVolume; }
-void setMusicVolume(uint8_t volume) { gMusicVolume = volume; }
+void setMusicVolume(uint8_t volume) { gMusicVolume = volume > kMaxVolume ? kMaxVolume : volume; }
 uint8_t getSoundEffectsVolume(void) { return gEffectsVolume; }
 void setSoundEffectsVolume(uint8_t volume) { gEffectsVolume = volume > kMaxVolume ? kMaxVolume : volume; }
 
 void playMusic(void)
 {
+    if (!gMixer)
+        return;
+    ObtainSemaphore(&gAudioLock);
+    if (!gMusicPlaying)
+        modResume();
+    gMusicPlaying = 1;
+    ReleaseSemaphore(&gAudioLock);
 }
 
 void stopMusic(void)
 {
+    if (!gMixer)
+        return;
+    ObtainSemaphore(&gAudioLock);
+    modStop();
+    gMusicPlaying = 0;
+    ReleaseSemaphore(&gAudioLock);
 }
 
 void playSoundEffect(SoundEffect soundEffect)

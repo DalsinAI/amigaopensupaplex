@@ -25,7 +25,7 @@
 SoundType sndType = SoundTypeNone;
 SoundType musType = SoundTypeInternalStandard;
 
-mm_word musicID = MOD_MUSIC_BEEP;
+mm_word musicID = MOD_MUSIC_ADLIB; // no PC-speaker tune as a MOD
 uint8_t gIsMusicInitialized = 0;
 uint8_t gMusicVolume = kMaxVolume;
 
@@ -120,7 +120,7 @@ void loadMusic()
             break;
         case SoundTypeInternalSamples:
         case SoundTypeInternalStandard:
-            musicID = MOD_MUSIC_BEEP;
+            musicID = MOD_MUSIC_ADLIB;
             break;
         case SoundTypeNone:
             return;

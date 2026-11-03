@@ -195,14 +195,15 @@ void loadMusic()
             break;
         case SoundTypeInternalSamples:
         case SoundTypeInternalStandard:
-            musicSuffix = kStandardSoundFileNameSuffix;
+            // The music is shipped as MODs; the PC-speaker tune has none
+            musicSuffix = kAdlibSoundFileNameSuffix;
             break;
         case SoundTypeNone:
             return;
     }
 
     char filename[kMaxSoundFilenameLength] = "";
-    snprintf(filename, kMaxSoundFilenameLength, "%s/music-%s.xm", kBaseAudioFolder, musicSuffix);
+    snprintf(filename, kMaxSoundFilenameLength, "%s/music-%s.mod", kBaseAudioFolder, musicSuffix);
 
     gMusic = Mix_LoadMUS(filename);
 

@@ -1315,6 +1315,23 @@ void limitFPS()
         return;
     }
 
+#if defined(__amigaos__)
+    // Keep a deadline, so a frame that waited for the display is made up
+    // by the next ones and the game keeps 70 frames a second.
+    static double sDeadline = 0;
+    uint32_t now = getTime();
+
+    if (sDeadline == 0 || now > sDeadline + 4 * kFrameDuration)
+    {
+        sDeadline = now;
+    }
+    sDeadline += kFrameDuration;
+    if (sDeadline > now)
+    {
+        waitTime((uint32_t)(sDeadline - now));
+    }
+    (void)sLastFrameTime;
+#else
     if (sLastFrameTime != 0)
     {
         uint32_t duration = (getTime() - sLastFrameTime);
@@ -1325,6 +1342,7 @@ void limitFPS()
     }
 
     sLastFrameTime = getTime();
+#endif
 }
 
 void videoLoop() //   proc near       ; CODE XREF: crt?2+52p crt?1+3Ep ...

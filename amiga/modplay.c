@@ -25,7 +25,8 @@ typedef struct {
 
 typedef struct {
     const ModSample *sample;
-    uint32_t pos;         /* 16.16 */
+    uint32_t pos;         /* whole bytes into the sample */
+    uint32_t frac;        /* and the fraction, of 65536 */
     uint32_t step;        /* 16.16 */
     uint16_t period;
     int volume;
@@ -157,6 +158,7 @@ static void playRow(void)
         {
             setPeriod(c, period);
             c->pos = 0;
+            c->frac = 0;
         }
         switch (c->effect)
         {
@@ -230,15 +232,17 @@ void modMix(int16_t *out, unsigned len, int volume)
                 continue;
             for (i = 0; i < n; i++)
             {
-                uint32_t at = c->pos >> 16;
+                uint32_t at = c->pos;
                 uint32_t end = s->loopLength > 2 ? s->loopStart + s->loopLength : s->length;
                 int v;
                 if (at >= end)
                 {
                     if (s->loopLength > 2)
                     {
-                        c->pos -= s->loopLength << 16;
-                        at = c->pos >> 16;
+                        /* A step past a short loop's end wraps as many
+                         * times as it takes, never out of the sample. */
+                        at = s->loopStart + (at - s->loopStart) % s->loopLength;
+                        c->pos = at;
                     }
                     else
                     {
@@ -248,7 +252,11 @@ void modMix(int16_t *out, unsigned len, int volume)
                 }
                 v = out[i] + ((s->data[at] * vol) >> 4);
                 out[i] = (int16_t)(v > 32767 ? 32767 : v < -32768 ? -32768 : v);
-                c->pos += c->step;
+                /* Whole bytes plus a fraction, so the 128 KB samples a
+                 * MOD can hold play to their ends. */
+                c->frac += c->step;
+                c->pos += c->frac >> 16;
+                c->frac &= 0xffffu;
             }
         }
         out += n;

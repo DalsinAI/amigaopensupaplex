@@ -53,12 +53,16 @@ static void presentIfDue(void);
 
 static void pollInput(void)
 {
+    const uint8_t *raw;
+
     if (!gVideoOpen)
         return;
     acgame_platform_poll(&gInput);
-    if (gInput.quit_requested && gInput.key[ACGAME_KEY_ESCAPE] == 0)
+    /* ACGame's quit_requested is Esc, which the game reads itself (leave a
+     * level, the menu), so quit is the Amiga's own: Right Amiga + Q. */
+    raw = acgame_platform_rawkeys();
+    if (raw && raw[0x67] && raw[0x10])
     {
-        /* the window was closed, not Esc pressed */
         gShouldExitLevel = 1;
         gShouldExitGame = 1;
     }

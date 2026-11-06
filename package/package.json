@@ -1,0 +1,82 @@
+{
+  "drawer": "OpenSupaplex",
+  "drawer_icon": "amiga/icons/OpenSupaplex-drawer.info",
+  "archive": "opensupaplex-{version}-68040",
+  "members": [
+    {
+      "name": "OpenSupaplex",
+      "build": "OpenSupaplex",
+      "check": "executable_sha256"
+    },
+    {
+      "name": "Libs/acgame.library",
+      "build": "acgame.library",
+      "check": "acgame_library_sha256"
+    },
+    {
+      "name": "OpenSupaplex.info",
+      "repo": "amiga/icon/opensupaplex.info"
+    },
+    {
+      "name": "",
+      "tar": "resources.tar"
+    },
+    {
+      "name": "ReadMe",
+      "repo": "AMIGA_PORT.md"
+    },
+    {
+      "name": "ReadMe.info",
+      "repo": "amiga/icons/ReadMe.info"
+    },
+    {
+      "name": "README.upstream.md",
+      "repo": "README.upstream.md"
+    },
+    {
+      "name": "README.upstream.md.info",
+      "repo": "amiga/icons/README.upstream.md.info"
+    }
+  ],
+  "aminet": [
+    [
+      "Short",
+      "OpenSupaplex, the Supaplex puzzle game, 68040+FPU"
+    ],
+    [
+      "Author",
+      "Digital Integration (Supaplex); Sergio Padrino (OpenSupaplex); Amiga port: AmiCradle Team"
+    ],
+    [
+      "Uploader",
+      "AmiCradle Team"
+    ],
+    [
+      "Type",
+      "game/think"
+    ],
+    [
+      "Version",
+      "{version}"
+    ],
+    [
+      "Requires",
+      "AmigaOS 3.x, 68040/68060 with FPU, AGA or RTG, AHI"
+    ],
+    [
+      "Architecture",
+      "m68k-amigaos >= 3.0"
+    ]
+  ],
+  "root": [
+    {
+      "name": "Install-OpenSupaplex",
+      "repo": "package/installer/Install-OpenSupaplex",
+      "installer": true
+    },
+    {
+      "name": "Install-OpenSupaplex.info",
+      "repo": "package/installer/Install-OpenSupaplex.info"
+    }
+  ]
+}

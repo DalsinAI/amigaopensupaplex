@@ -2,36 +2,36 @@
 #
 #   make -f amiga/Makefile.amigaos STOVE=/path/to/os32-gcc16/prefix \
 #        NDK=/path/to/gfopensdk/OpenNDK/Include_H \
-#        ACGAME=/path/to/amicradle-guest/gameports/acgame
+#        ACGAME=/path/to/acgame ACGAMELIB=/path/to/acgame/build-amiga
 #
-# ACGAME needs acgame_platform_rawkeys (amicradle-guest #564).
+# ACGAME is DalsinAI/acgame and ACGAMELIB its build: the game links
+# libacgame.a, the stubs that open acgame.library, which the drawer ships in
+# Libs/. package/build-amiga.sh builds both.
 # Output: build/amigaos/OpenSupaplex/ with the executable and the game's
 # resources (levels, graphics, audio) beside it; run it from that drawer.
 
 STOVE   ?= $(HOME)/AmiCradle/stoves/os32-gcc16/prefix
 NDK     ?= $(HOME)/AmiCradle/gfopensdk/OpenNDK/Include_H
-ACGAME  ?= ../amicradle-guest/gameports/acgame
+ACGAME  ?= ../acgame
+ACGAMELIB ?= $(ACGAME)/build-amiga
 CC      = $(STOVE)/bin/m68k-amigaos-gcc
 CPU     ?= -m68040 -m68881
 OPT     ?= -O2 -fomit-frame-pointer
 CFLAGS  = -noixemul -std=gnu99 $(OPT) $(CPU) -fcommon -Wall -Wno-unused-variable \
           -Wno-unused-but-set-variable -I$(ACGAME)/include -I$(NDK)
-ACFLAGS = -noixemul -std=gnu99 -O2 $(CPU) -Wall -Wextra -Werror \
-          -fno-delete-null-pointer-checks -I$(ACGAME)/include -I$(NDK)
 LDFLAGS = -noixemul $(CPU)
 BUILD   = build/amigaos
 OUT     = $(BUILD)/OpenSupaplex
 
 GAME    = $(notdir $(basename $(wildcard src/*.c)))
-ACG     = c2p_ref ham8 platform_aros_aga
 
 OBJS    = $(GAME:%=$(BUILD)/%.o) $(BUILD)/ini.o $(BUILD)/virtualKeyboard.o \
-          $(BUILD)/platform_acgame.o $(BUILD)/modplay.o $(ACG:%=$(BUILD)/acgame_%.o)
+          $(BUILD)/platform_acgame.o $(BUILD)/modplay.o
 
 all: $(OUT)/OpenSupaplex
 
 $(OUT)/OpenSupaplex: $(OBJS) | $(OUT)
-	$(CC) $(LDFLAGS) -o $@ $^ -lm
+	$(CC) $(LDFLAGS) -o $@ $^ $(ACGAMELIB)/libacgame.a -lm
 	cp -r resources/. $(OUT)/
 	cp amiga/icon/opensupaplex.info $(OUT)/OpenSupaplex.info
 
@@ -49,9 +49,6 @@ $(BUILD)/platform_acgame.o: amiga/platform_acgame.c amiga/modplay.h src/*.h | $(
 
 $(BUILD)/modplay.o: amiga/modplay.c amiga/modplay.h | $(BUILD)
 	$(CC) $(CFLAGS) -Wextra -c -o $@ $<
-
-$(BUILD)/acgame_%.o: $(ACGAME)/src/%.c | $(BUILD)
-	$(CC) $(ACFLAGS) -c -o $@ $<
 
 $(BUILD) $(OUT):
 	mkdir -p $@

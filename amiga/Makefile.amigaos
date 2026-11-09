@@ -33,7 +33,7 @@ all: $(OUT)/OpenSupaplex
 $(OUT)/OpenSupaplex: $(OBJS) | $(OUT)
 	$(CC) $(LDFLAGS) -o $@ $^ $(ACGAMELIB)/libacgame.a -lm
 	cp -r resources/. $(OUT)/
-	cp amiga/icon/opensupaplex.info $(OUT)/OpenSupaplex.info
+	cp amiga/icons/OpenSupaplex.info $(OUT)/OpenSupaplex.info
 
 $(BUILD)/%.o: src/%.c src/*.h | $(BUILD)
 	$(CC) $(CFLAGS) -c -o $@ $<

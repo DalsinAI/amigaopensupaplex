@@ -30,7 +30,7 @@ The platform layer is `amiga/platform_acgame.c`: 320x200 in 16 colours through A
 
 Keys are the original game's: arrows or keypad move, Space with a direction eats or pushes without moving, Esc quits a level, F-keys and the mouse work the menus. Help stands in for F12, the keypad brackets for Num Lock and Scroll Lock.
 
-The GlowIcon is `amiga/icon/opensupaplex.info` (46x46, own art), made by `amiga/icon/make_icon.py`; copy it next to the executable as `OpenSupaplex.info`. The drawer, ReadMe and README.upstream.md GlowIcons are made by port_icons.py from `amiga/icons/icons.json`.
+The program, drawer, ReadMe and README.upstream.md GlowIcons are made by port_icons.py from `amiga/icons/icons.json`, from our own art (`amiga/icons/art/opensupaplex.svg`); the program's icon goes next to the executable as `OpenSupaplex.info`.
 
 ## Installing
 
